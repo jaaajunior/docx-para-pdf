@@ -65,14 +65,14 @@
   <div id="renderSandbox" class="render-sandbox" aria-hidden="true"></div>
 
   <footer class="app-footer">
-    <p>Conversão feita 100% no navegador (mammoth.js + jsPDF + html2canvas). Documentos com layouts muito complexos (colunas, caixas de texto, formatações avançadas) podem perder parte da formatação original.</p>
+    <p>Conversão feita 100% no navegador (docx-preview + html2canvas + jsPDF), preservando cabeçalho, rodapé e o layout de página do documento original. Elementos muito específicos do Word podem variar ligeiramente em relação ao original.</p>
   </footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.2/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.6/dist/docx-preview.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <script src="script.js"></script>
 </body>

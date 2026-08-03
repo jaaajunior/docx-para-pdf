@@ -121,36 +121,52 @@
 
   async function convertFileToPdf(item) {
     const arrayBuffer = await item.file.arrayBuffer();
-    const result = await mammoth.convertToHtml({ arrayBuffer });
 
-    renderSandbox.innerHTML = `
-      <div style="
-        font-family: 'Times New Roman', Georgia, serif;
-        font-size: 14px;
-        line-height: 1.5;
-        color: #111;
-        padding: 40px 48px;
-        width: 794px;
-        background: #fff;
-      ">${result.value}</div>
-    `;
-    const contentEl = renderSandbox.firstElementChild;
+    renderSandbox.innerHTML = '';
+    const styleContainer = document.createElement('div');
+    const bodyContainer = document.createElement('div');
+    renderSandbox.appendChild(styleContainer);
+    renderSandbox.appendChild(bodyContainer);
+
+    await window.docx.renderAsync(arrayBuffer, bodyContainer, styleContainer, {
+      inWrapper: true,
+      ignoreLastRenderedPageBreak: true,
+      renderHeaders: true,
+      renderFooters: true,
+      renderFootnotes: true,
+      renderEndnotes: true,
+      experimental: true,
+    });
+
+    const pageSections = bodyContainer.querySelectorAll('section.docx');
+    if (pageSections.length === 0) {
+      renderSandbox.innerHTML = '';
+      throw new Error('não foi possível interpretar o documento');
+    }
 
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    let doc = null;
 
-    await new Promise((resolve, reject) => {
-      doc.html(contentEl, {
-        callback: () => resolve(),
-        x: 0,
-        y: 0,
-        html2canvas: { scale: 0.75, useCORS: true },
-        autoPaging: 'text',
-        width: 595,
-        windowWidth: 794,
+    for (const section of pageSections) {
+      const widthPx = section.getBoundingClientRect().width;
+      const heightPx = section.getBoundingClientRect().height;
+      const widthPt = widthPx * 0.75;
+      const heightPt = heightPx * 0.75;
+
+      const canvas = await html2canvas(section, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
       });
-      setTimeout(() => reject(new Error('Tempo limite excedido')), 60000);
-    });
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+      if (!doc) {
+        doc = new jsPDF({ unit: 'pt', format: [widthPt, heightPt] });
+      } else {
+        doc.addPage([widthPt, heightPt]);
+      }
+      doc.addImage(imgData, 'JPEG', 0, 0, widthPt, heightPt);
+    }
 
     renderSandbox.innerHTML = '';
     return doc.output('blob');

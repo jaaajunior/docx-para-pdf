@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversor DOCX → PDF em Lote</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <header class="app-header">
+    <h1>Word → PDF <span>em lote</span></h1>
+    <p>Converta vários arquivos .docx para PDF direto no navegador. Nenhum arquivo é enviado para servidor algum.</p>
+  </header>
+
+  <label id="dropzone" for="fileInput" class="dropzone">
+    <input type="file" id="fileInput" accept=".docx" multiple hidden>
+    <div class="dropzone-content">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 16V4M12 4l-4 4M12 4l4 4"/>
+        <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+      </svg>
+      <p><strong>Clique para selecionar</strong> ou arraste arquivos .docx aqui</p>
+      <span class="hint">Você pode selecionar vários arquivos de uma vez</span>
+    </div>
+  </label>
+
+  <section class="toolbar">
+    <div class="toolbar-info">
+      <span id="fileCount">0 arquivos</span>
+    </div>
+    <div class="toolbar-actions">
+      <button id="clearBtn" class="btn btn-ghost" disabled>Limpar lista</button>
+      <button id="convertBtn" class="btn btn-primary" disabled>Converter tudo</button>
+      <button id="downloadZipBtn" class="btn btn-success" disabled>Baixar ZIP</button>
+    </div>
+  </section>
+
+  <section class="progress-wrap" id="overallProgressWrap" hidden>
+    <div class="progress-bar">
+      <div class="progress-fill" id="overallProgressFill"></div>
+    </div>
+    <span id="overallProgressLabel">0 / 0</span>
+  </section>
+
+  <section class="file-list-wrap">
+    <table class="file-list" id="fileList">
+      <thead>
+        <tr>
+          <th>Arquivo</th>
+          <th>Tamanho</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="fileListBody">
+        <tr class="empty-row" id="emptyRow">
+          <td colspan="4">Nenhum arquivo adicionado ainda.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div id="renderSandbox" class="render-sandbox" aria-hidden="true"></div>
+
+  <footer class="app-footer">
+    <p>Conversão feita 100% no navegador (mammoth.js + jsPDF + html2canvas). Documentos com layouts muito complexos (colunas, caixas de texto, formatações avançadas) podem perder parte da formatação original.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.2/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

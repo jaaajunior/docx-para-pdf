@@ -144,12 +144,16 @@
       throw new Error('não foi possível interpretar o documento');
     }
 
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+
     const { jsPDF } = window.jspdf;
     let doc = null;
 
     for (const section of pageSections) {
-      const widthPx = section.getBoundingClientRect().width;
-      const heightPx = section.getBoundingClientRect().height;
+      const widthPx = Math.ceil(section.getBoundingClientRect().width);
+      const heightPx = Math.ceil(section.getBoundingClientRect().height);
       const widthPt = widthPx * 0.75;
       const heightPt = heightPx * 0.75;
 
@@ -157,6 +161,9 @@
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
+        foreignObjectRendering: true,
+        windowWidth: widthPx,
+        windowHeight: heightPx,
       });
       const imgData = canvas.toDataURL('image/jpeg', 0.92);
 

@@ -161,7 +161,6 @@
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
-        foreignObjectRendering: true,
         windowWidth: widthPx,
         windowHeight: heightPx,
       });
